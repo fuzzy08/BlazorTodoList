@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TodoDataAccess.DataAccess;
 using TodoList.Data;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+using TodoList.Data.SqlDataAccess;
 
 namespace TodoList
 {
@@ -33,6 +37,12 @@ namespace TodoList
             services.AddSingleton<IPersonData, SqlPersonData>();
             services.AddSingleton<ICategoryData, SqlCategoryData>();
             services.AddSingleton<ITodoItemData, SqlTodoItemData>();
+            services.AddSingleton<PersonDataAccess>();
+            services.AddBlazorise( options => {
+                options.ChangeTextOnKeyPress = true; //not sure what this does.
+            });
+            services.AddBootstrapProviders();
+            services.AddFontAwesomeIcons();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

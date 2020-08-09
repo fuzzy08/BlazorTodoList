@@ -1,0 +1,60 @@
+﻿
+@page "/PersonSelector"
+
+<h3>PeopleList</h3>
+
+@using TodoDataAccess
+@using TodoDataAccess.Models
+@using TodoDataAccess.DataAccess
+@* Ensure you put the "I" here! the whole point of using the interface is to decouple the DB implementation from the UI. Also it won't work anyway. *@
+@inject IPersonData _personData;
+
+@if (people == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Select Person
+                </button>
+                <div class="dropdown-menu scrollableDropdown" aria-labelledby="dropdownMenu1">
+                    @foreach (var p in people)
+                    {
+                        <a class="dropdown-item">@p.LastName, @p.FirstName</a>
+                    }
+                </div>
+            </div>
+        </div>
+        @*<input type="text" class="form-control" aria-label="Text input with dropdown button" @bind="@selectedPerson.LastName, @selectedPerson.FirstName">*@
+    </div>
+
+    <style>
+        .scrollableDropdown {
+            height: 20vw;
+            overflow: auto;
+        }
+    </style>
+
+
+
+}
+
+@code {
+    Person selectedPerson = new Person();
+
+    List<Person> people;
+
+    protected async override Task OnInitializedAsync()
+    {
+        people = await _personData.GetPeople();
+    }
+
+    private void UpdateSelectedPerson(Person p)
+    {
+        selectedPerson = p;
+    }
+}

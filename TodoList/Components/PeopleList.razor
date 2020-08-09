@@ -5,27 +5,33 @@
 @using TodoDataAccess
 @using TodoDataAccess.Models
 @using TodoDataAccess.DataAccess
-@* Ensure you put the "I" here! the whole point of using the interface is to decouple the DB implementation from the UI. Also it won't work anyway. *@
-@inject IPersonData _personData;
+@using Data.SqlDataAccess;
+@using ViewModels;
 
-@if(people == null) {
+@* Ensure you put the "I" here! the whole point of using the interface is to decouple the DB implementation from the UI. Also it won't work anyway. *@
+@inject IPersonData _oldPersonData;
+@*in this case you probably don't need an interface since it's specific to... actually do would*@ 
+@inject PersonDataAccess _personData; 
+
+@if (people == null)
+{
     <p><em>Loading...</em></p>
 }
 else
 {
 
-<li>
-    @foreach(var p in people)
+
+    @foreach (var p in people)
     {
         <ul>@p.LastName, @p.FirstName</ul>
     }
 
 
-</li>
+
 }
 
 @code {
-    List<Person> people;
+    List<PersonModel> people;
 
     protected async override Task OnInitializedAsync()
     {

@@ -21,6 +21,10 @@ namespace TodoDataAccess.DataAccess
 
     public class SqlPersonData : IPersonData
     {
+
+        //This is dependency injection. it seems you can specify dependencies in the constructor and the application will inject whatever properties it has that match the dependency.
+        //The referenced dependency "must be registered in the service container." https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1
+        //The IConfiguration dependency is automatically registered in the service container. This happens in Startup.ConfigureServices()
         private IConfiguration _config;
         public SqlPersonData(IConfiguration config)
         {

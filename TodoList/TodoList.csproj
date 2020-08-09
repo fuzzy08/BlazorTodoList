@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.1.2" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.1.2" />
+    <PackageReference Include="bootstrap" Version="4.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TodoDataAccess\TodoDataAccess.csproj" />
   </ItemGroup>
 

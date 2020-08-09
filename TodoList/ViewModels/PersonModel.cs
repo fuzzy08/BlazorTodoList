@@ -13,5 +13,10 @@ namespace TodoList.ViewModels
         public string EmailAddress { get; set; }
         public string BirthDate { get; set; }
 
+        public string FullName { get
+            {
+                return $"{LastName}, {FirstName}";
+            } }
+
     }
 }
