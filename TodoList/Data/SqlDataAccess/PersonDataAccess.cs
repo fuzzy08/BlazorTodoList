@@ -27,24 +27,54 @@ namespace TodoList.Data.SqlDataAccess
 
             List<Person> people = await _personData.GetPeople();
             
-            if (people != null)
+            if (people != null && people.Count > 0)
             {
                 foreach (var p in people)
                 {
-                    peopleModels.Add(new PersonModel
-                    {
-                        PersonID = p.PersonID,
-                        LastName = p.LastName,
-                        FirstName = p.FirstName,
-                        EmailAddress = p.EmailAddress,
-                        BirthDate = p.BirthDate
-                    });
+                    peopleModels.Add(MapPersonToPersonModel(p));
                 }
             }
 
             return peopleModels;
         }
 
+        public async Task<PersonModel> GetPersonByEmail(string emailAddress)
+        {
+            Person p = await _personData.GetPersonByEmail(emailAddress);
 
+            if(p != null)
+            {
+                return MapPersonToPersonModel(p);
+            }
+            return null;
+        }
+
+        public async Task<PersonModel> GetPersonByName(string firstName, string lastName)
+        {
+            Person p = await _personData.GetPersonByName(firstName, lastName);
+
+            if (p != null)
+            {
+                return MapPersonToPersonModel(p);
+            }
+            return null;
+        }
+
+        public Task InsertPerson(string lastName, string firstName, string emailAddress = null, string birthDate = null)
+        {
+            return _personData.InsertPerson(lastName, firstName, emailAddress, birthDate);
+        }
+
+        private PersonModel MapPersonToPersonModel(Person p)
+        {
+            return new PersonModel
+            {
+                PersonID = p.PersonID,
+                LastName = p.LastName,
+                FirstName = p.FirstName,
+                EmailAddress = p.EmailAddress,
+                BirthDate = p.BirthDate
+            };
+        }
     }
 }

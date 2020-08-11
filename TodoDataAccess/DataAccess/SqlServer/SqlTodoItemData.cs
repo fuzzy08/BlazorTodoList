@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using TodoDataAccess.Models;
@@ -23,13 +24,13 @@ namespace TodoDataAccess.DataAccess
         /// </summary>
         /// <param name="personID"></param>
         /// <returns></returns>
-        public List<TodoItem> GetTodoItemsByPerson(int personID)
+        public async Task<List<TodoItem>> GetTodoItemsByPerson(int personID)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
-                var output = connection.Query<TodoItem>("dbo.GET_TODOITEMSBYPERSON @PersonID", new { PersonID = personID }).ToList();
+                var output = await connection.QueryAsync<TodoItem>("dbo.GET_TODOITEMSBYPERSON @PersonID", new { PersonID = personID });
 
-                return output;
+                return output.ToList();
             }
         }
 
@@ -42,7 +43,7 @@ namespace TodoDataAccess.DataAccess
         /// <param name="title"></param>
         /// <param name="desc"></param>
         #region sets
-        public void InsertTodoItem(int personID, string title, int categoryID = 0, string desc = null)
+        public Task InsertTodoItem(int personID, string title, int categoryID = 0, string desc = null)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
@@ -50,7 +51,7 @@ namespace TodoDataAccess.DataAccess
 
                 todoItems.Add(new TodoItem { PersonID = personID, CategoryID = categoryID, Title = title, Description = desc });
 
-                connection.Execute("dbo.INSERT_TODOITEM @PersonID, CategoryID, @Title, @Description", todoItems);
+                return connection.ExecuteAsync("dbo.INSERT_TODOITEM @PersonID, CategoryID, @Title, @Description", todoItems);
             }
         }
 

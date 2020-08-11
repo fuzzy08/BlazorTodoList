@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TodoDataAccess.Models;
+using TodoList.ViewModels;
 
-namespace TodoDataAccess.DataAccess
+namespace TodoList.Data.SqlDataAccess
 {
-    public interface ITodoItemData
+    public interface ITodoItemDataAccess
     {
-        Task<List<TodoItem>> GetTodoItemsByPerson(int personID);
+        Task<List<TodoItemModel>> GetTodoItemsByPerson(int personID);
         Task InsertTodoItem(int personID, string title, int categoryID = 0, string desc = null);
     }
 }

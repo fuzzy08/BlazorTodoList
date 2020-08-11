@@ -6,6 +6,7 @@
 @using TodoDataAccess
 @using TodoDataAccess.Models
 @using TodoDataAccess.DataAccess
+@using TodoList.ViewModels 
 @* Ensure you put the "I" here! the whole point of using the interface is to decouple the DB implementation from the UI. Also it won't work anyway. *@
 @inject IPersonData _personData;
 
@@ -46,11 +47,11 @@ else
 @code {
     Person selectedPerson = new Person();
 
-    List<Person> people;
+    List<PersonModel> people;
 
     protected async override Task OnInitializedAsync()
     {
-        people = await _personData.GetPeople();
+        people = await ();
     }
 
     private void UpdateSelectedPerson(Person p)
