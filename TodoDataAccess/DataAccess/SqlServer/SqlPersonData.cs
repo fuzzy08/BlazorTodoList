@@ -77,6 +77,22 @@ namespace TodoDataAccess.DataAccess
                 return output.ToList().First();
             }
         }
+        /// <summary>
+        /// returns a list of people from the Person table that matches the supplied first and last name.
+        /// </summary>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <returns></returns>
+        public async Task<List<Person>> SearchPeopleByName(string firstName, string lastName)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
+            {
+                var output = await connection.QueryAsync<Person>("dbo.SEARCH_PEOPLEBYNAME @LastName, @FirstName", new { LastName = lastName, FirstName = firstName });
+
+                return output.ToList();
+            }
+        }
+
         #endregion gets
 
         #region sets

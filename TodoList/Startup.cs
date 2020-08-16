@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,7 +31,9 @@ namespace TodoList
             services.AddSingleton<IPersonData, SqlPersonData>();
             services.AddSingleton<ICategoryData, SqlCategoryData>();
             services.AddSingleton<ITodoItemData, SqlTodoItemData>();
-            services.AddSingleton<PersonDataAccess>();
+            services.AddSingleton<IPersonDataAccess, PersonDataAccess>();
+            services.AddSingleton<ICategoryDataAccess, CategoryDataAccess>();
+            services.AddSingleton<ITodoItemDataAccess, TodoItemDataAccess>();
             services.AddBlazorise( options => {
                 options.ChangeTextOnKeyPress = true; //not sure what this does.
             });

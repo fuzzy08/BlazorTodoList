@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TodoDataAccess.DataAccess;
 using TodoDataAccess.Models;
 using TodoList.ViewModels;
-using TodoList.Data.DataContracts;
+using TodoList.Data.SqlDataAccess;
 
 namespace TodoList.Data.SqlDataAccess
 {
@@ -26,7 +26,7 @@ namespace TodoList.Data.SqlDataAccess
             List<PersonModel> peopleModels = new List<PersonModel>();
 
             List<Person> people = await _personData.GetPeople();
-            
+
             if (people != null && people.Count > 0)
             {
                 foreach (var p in people)
@@ -42,7 +42,7 @@ namespace TodoList.Data.SqlDataAccess
         {
             Person p = await _personData.GetPersonByEmail(emailAddress);
 
-            if(p != null)
+            if (p != null)
             {
                 return MapPersonToPersonModel(p);
             }
@@ -58,6 +58,23 @@ namespace TodoList.Data.SqlDataAccess
                 return MapPersonToPersonModel(p);
             }
             return null;
+        }
+
+        public async Task<List<PersonModel>> SearchPeopleByName(string firstName, string lastName)
+        {
+            List<PersonModel> peopleModels = new List<PersonModel>();
+
+            List<Person> people = await _personData.SearchPeopleByName(firstName, lastName);
+
+            if (people != null && people.Count > 0)
+            {
+                foreach (var p in people)
+                {
+                    peopleModels.Add(MapPersonToPersonModel(p));
+                }
+            }
+
+            return peopleModels;
         }
 
         public Task InsertPerson(string lastName, string firstName, string emailAddress = null, string birthDate = null)
