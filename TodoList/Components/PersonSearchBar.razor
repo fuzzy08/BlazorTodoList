@@ -1,6 +1,7 @@
 ﻿@using TodoList.ViewModels
 @using TodoList.Data;
 @using TodoList.Data.SqlDataAccess;
+@using TodoList.Components;
 
 
 
@@ -13,57 +14,67 @@
 <div class="container-fluid ">
     <div class="row">
         @* Search Box *@
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <form>
                 <div class="form-group formContainer">
-                    <div class="row my-2">
-                        <div class="col-sm-2 text-right">
-                            <label for="lastName">Last Name</label>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Last Name</span>
+                                </div>
+                                <input type="text" class="form-control" id="lastNameInput" @bind-value="lastNameInput" />
+                            </div>
                         </div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="lastNameInput" @bind-value="lastNameInput" />
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">First Name</span>
+                                </div>
+                                <input type="text" class="form-control" id="firstNameInput" @bind-value="firstNameInput" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Email Address</span>
+                                </div>
+                                <input type="text" class="form-control" id="emailAddressInput" @bind-value="emailAddressInput" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Birthday</span>
+                                </div>
+                                <input type="text" class="form-control" id="birthDayInput" @bind-value="birthdayInput" />
+                            </div>
                         </div>
                     </div>
                     <div class="row my-2">
-                        <div class="col-sm-2 text-right">
-                            <label for="firstName">First Name</label>
-                        </div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="firstNameInput" @bind-value="firstNameInput" />
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-sm-2 text-right">
-                            <label for="email">Email</label>
-                        </div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="emailInput" />
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-sm-2 text-right">
-                            <label for="birthday">Birth Day</label>
-                        </div>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control" id="birthdayInput" />
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-sm-2 text-right">
-        @* https://stackoverflow.com/questions/63429397/blazor-parent-component-unexpectedly-gets-reinitialized-after-onclick-event-in-c
-         Alright, so here's my lesson in async programming for the day. Literally, I debugged this all day.
-        Async calls return the task object aaaallll the way to the top of the call stack.
-        This onclick code used to read "SearchPeople(firstNameInput, lastNameInput)."
-        So, this fucker never waited on the returned Task before continuing to execute the code. 
-        The method was executed, stuff happened, but the page was rendered before the peopleResults object 
-        could be populated.
+                        <div class="col-sm-6" style="text-align: center">
+@* https://stackoverflow.com/questions/63429397/blazor-parent-component-unexpectedly-gets-reinitialized-after-onclick-event-in-c
+Alright, so here's my lesson in async programming for the day. Literally, I debugged this all day.
+Async calls return the task object aaaallll the way to the top of the call stack.
+This onclick code used to read "SearchPeople(firstNameInput, lastNameInput)."
+So, this fucker never waited on the returned Task before continuing to execute the code.
+The method was executed, stuff happened, but the page was rendered before the peopleResults object
+could be populated.
 
-        In short, when calling async methods in the code block, make sure to await them as shown if it affects
-        the way the component gets rendered.
-        *@
-                            <button class="btn btn-outline-primary" type="button" @onclick="(async () => await SearchPeople(firstNameInput, lastNameInput))">Search</button>
+In short, when calling async methods in the code block, make sure to await them as shown if it affects
+the way the component gets rendered.
+                            *@
+                            <button class="btn btn-primary" type="button" @onclick="(async () => await SearchPeople(firstNameInput, lastNameInput))" style="width: 100%">Search</button>
                         </div>
-                        <div class="col-sm-10"></div>
+                        <div class="col-sm-6" style="text-align: center">
+                            <button class="btn btn-secondary" type="button" @onclick="ClearSearchPane" style="width: 100%">Clear</button>
+                        </div>
                     </div>
 
                 </div>
@@ -105,6 +116,8 @@
 
     private string lastNameInput = string.Empty;
     private string firstNameInput = string.Empty;
+    private string emailAddressInput = string.Empty;
+    private string birthdayInput = string.Empty;
 
     private List<PersonModel> peopleResults {
         get;
@@ -115,4 +128,11 @@
         peopleResults = await _personData.SearchPeopleByName(firstName, lastName);
     }
 
+    private void ClearSearchPane()
+    {
+        lastNameInput = string.Empty;
+        firstNameInput = string.Empty;
+        emailAddressInput = string.Empty;
+        birthdayInput = string.Empty;
+    }
 }

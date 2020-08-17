@@ -6,6 +6,7 @@ namespace TodoList.Data.SqlDataAccess
 {
     public interface ITodoItemDataAccess
     {
+        Task<TodoItemModel> GetTodoItemByID(int todoItemID);
         Task<List<TodoItemModel>> GetTodoItemsByPerson(int personID);
         Task InsertTodoItem(int personID, string title, int categoryID = 0, string desc = null);
     }

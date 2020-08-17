@@ -19,16 +19,27 @@ namespace TodoDataAccess.DataAccess
             _config = config;
         }
         #region gets
+        public async Task<TodoItem> GetTodoItemByID(int todoItemID)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
+            {
+                var output = await connection.QueryAsync<TodoItem>("dbo.GET_TODOITEMSBYID @TodoItem", new { TodoItemID = todoItemID });
+
+                return output.ToList().First();
+            }
+
+        }
+
         /// <summary>
         /// Gets all todo list items given a person's ID
         /// </summary>
         /// <param name="personID"></param>
         /// <returns></returns>
-        public async Task<List<TodoItem>> GetTodoItemsByPerson(int personID)
+        public async Task<List<TodoItem>> GetTodoItemsByPerson(int personID, int categoryID = 0)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
-                var output = await connection.QueryAsync<TodoItem>("dbo.GET_TODOITEMSBYPERSON @PersonID", new { PersonID = personID });
+                var output = await connection.QueryAsync<TodoItem>("dbo.GET_TODOITEMSBYPERSON @PersonID, @CategoryID", new { PersonID = personID, CategoryID = categoryID });
 
                 return output.ToList();
             }

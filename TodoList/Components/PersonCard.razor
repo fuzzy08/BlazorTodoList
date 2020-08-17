@@ -1,0 +1,34 @@
+﻿@* 
+Use a container, make it fluid and give a quick overview of the state of the person, how many todo items they have, etc.    
+*@
+@using TodoList.ViewModels
+@using TodoList.Data.SqlDataAccess
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Person.FullName</h5>
+        <p class="card-text">@Person.EmailAddress</p>
+    </div>
+    @* Here we're going to need to give a list of categories with a badge that shows the ratio of completed items
+        and when you click them it shows the list for that given category in another pane.*@
+    <ul class="list-group list-group-flush">
+
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+    </ul>
+    <div class="card-body">
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PersonModel Person { get; set; }
+
+    //private async override Task OnInitializedAsync()
+    //{
+
+    //}
+}

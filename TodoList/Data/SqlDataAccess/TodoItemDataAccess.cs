@@ -17,6 +17,17 @@ namespace TodoList.Data.SqlDataAccess
             _todoData = todoData;
         }
 
+        public async Task<TodoItemModel> GetTodoItemByID(int todoItemID)
+        {
+            TodoItem todo = await _todoData.GetTodoItemByID(todoItemID);
+
+            if(todo != null)
+            {
+                return MapTodoItemToTodoItemModel(todo);
+            }
+            return null;
+        }
+
         public async Task<List<TodoItemModel>> GetTodoItemsByPerson(int personID)
         {
             List<TodoItemModel> todoModels = new List<TodoItemModel>();

@@ -1,6 +1,5 @@
 ﻿@page "/PeopleList"
 
-<h3>PeopleList</h3>
 
 @using TodoDataAccess
 @using TodoDataAccess.Models
@@ -10,7 +9,7 @@
 @using TodoList.Data;
 
 @* Ensure you put the "I" here! the whole point of using the interface is to decouple the DB implementation from the UI. Also it won't work anyway. *@
-@*@inject IPersonDataAccess _personData;*@ 
+@*@inject IPersonDataAccess _personData;*@
 
 @if (People == null)
 {
@@ -18,14 +17,33 @@
 }
 else
 {
-    <ul>
-
+    <div class="list-group pre-scrollable">
     @foreach (var p in People)
     {
-        <li>@p.LastName, @p.FirstName</li>
+        //todo: figure out how to highlight these buttons when clicked and show a card of the person below with another component
+        //probably using an event or something
+        <button type="button" class="list-group-item list-group-item-action p-0">
+                    @p.LastName, @p.FirstName
+            </button>
+
+        <!--<div class="card m-1" style="width: 18rem">
+            <div class="card-body">
+                <h5 class="card-title">p.LastName, p.FirstName</h5>
+                <h6 class="card-subtitle mb-2 text-muted">p.EmailAddress</h6>-->
+        @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
+        <!--<a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>-->
     }
-    </ul>
+    </div>
 }
+
+<style>
+button:focus {
+    background-color: blue;
+}
+</style>
 
 @code {
     [Parameter]
