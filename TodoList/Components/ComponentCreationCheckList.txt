@@ -20,3 +20,9 @@ UI:
 - Is this a layout component, or a data component? choose one. (is this component meant to arrange things or display things?)
 - If this component has data, what situations will its bound data be updated?
 - waht UI events should trigger a data mutation? 
+
+Maybe a quicker guideline could be compressed into these questions:
+
+Who is this component for?
+What data is this component responsible for?
+Could this component be broken down any further?
