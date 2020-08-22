@@ -4,6 +4,13 @@ Use a container, make it fluid and give a quick overview of the state of the per
 @using TodoList.ViewModels
 @using TodoList.Data.SqlDataAccess
 
+@inject IPersonDataAccess _personData;
+@if(Person == null)
+{
+    <p>Loading Person...</p>
+}
+else
+{
 <div class="card" style="width: 18rem;">
     <div class="card-body">
         <h5 class="card-title">@Person.FullName</h5>
@@ -22,13 +29,16 @@ Use a container, make it fluid and give a quick overview of the state of the per
         <a href="#" class="card-link">Another link</a>
     </div>
 </div>
+}
 
 @code {
-    [Parameter]
+    //[Parameter]
     public PersonModel Person { get; set; }
 
-    //private async override Task OnInitializedAsync()
-    //{
+    protected async override Task OnInitializedAsync()
+    {
+        Person = await _personData.GetPersonByName("Scarlett", "Robertson");
 
-    //}
+        //Person = new PersonModel { FirstName = "hello", LastName = "Goodbye", EmailAddress = "something@email.com" };
+    }
 }

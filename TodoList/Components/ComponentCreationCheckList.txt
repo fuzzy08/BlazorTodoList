@@ -1,0 +1,22 @@
+It helps to spell out what the components' purpose is when initally making it. 
+I've just started with coding and I've quickly lost focus on what I'm supposed to be making.
+This will be a sort of checklist to reference when creating a new component to help prevent 
+scope creep and help make concrete goals.
+
+LIFECYCLE: 
+- What should be loaded into the component as it's initialized? 
+- What parameters are not going to change throughout the component's lifecycle?
+- Should this component be loaded quickly? Is there content that should use placeholders?
+- Is this component ever expected to be rendered without parameter values given?
+- When this component is destroyed what actions need to take place in the DB?
+
+DATA: 
+- Does this component need data access, or will it be used as a child component and be given params?
+- Is this component representing ONE and only ONE model? (if not, make child components)
+- Could this component handle a change in Databases?
+- Is this component responsible for saving/changing data, or just displaying it?
+
+UI:
+- Is this a layout component, or a data component? choose one. (is this component meant to arrange things or display things?)
+- If this component has data, what situations will its bound data be updated?
+- waht UI events should trigger a data mutation? 
