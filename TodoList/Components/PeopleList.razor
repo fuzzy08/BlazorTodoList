@@ -1,4 +1,6 @@
-﻿@page "/PeopleList"
+﻿@*The purpose of this component is to display a list of people. *@
+
+@page "/PeopleList"
 
 
 @using TodoDataAccess
@@ -9,7 +11,7 @@
 @using TodoList.Data;
 
 @* Ensure you put the "I" here! the whole point of using the interface is to decouple the DB implementation from the UI. Also it won't work anyway. *@
-@*@inject IPersonDataAccess _personData;*@
+@inject IPersonDataAccess _personData;
 
 @if (People == null)
 {
@@ -49,8 +51,8 @@ button:focus {
     [Parameter]
     public IReadOnlyList<PersonModel> People { get; set; }
 
-    //protected async override Task OnInitializedAsync()
-    //{
-    //    //People = await _personData.GetPeople();
-    //}
+    protected async override Task OnInitializedAsync()
+    {
+        People = await _personData.SearchPeopleByName("", "B");
+    }
 }

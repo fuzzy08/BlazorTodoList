@@ -28,11 +28,15 @@ namespace TodoDataAccess.DataAccess
         /// <returns></returns>
         public async Task<List<Category>> GetCategoriesByPerson(int personID) //Todo: Allow for a TodoItem to have more than one Category (Many to Many)
         {
+            string sql = "SELECT * FROM CATEGORIES WHERE PersonID = @PersonID";
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
-                var output = await connection.QueryAsync<Category>("dbo.GET_CATEGORIESBYPERSON @PersonID", new { PersonID = personID });
-                return output.ToList();
+                var output = await connection.QueryAsync<Category>(sql, new { PersonID = personID });
+
+                if (output.Count() != 0)
+                    return output.ToList();
             }
+            return null;
         }
         #endregion gets
         #region sets
