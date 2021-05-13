@@ -23,7 +23,8 @@ namespace TodoDataAccess.DataAccess
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
-                var output = await connection.QueryAsync<TodoItem>("dbo.GET_TODOITEMSBYID @TodoItem", new { TodoItemID = todoItemID });
+                string sql = "SELECT * FROM TODOITEM WHERE ID = @todoItemID";
+                var output = await connection.QueryAsync<TodoItem>(sql , new { TodoItemID = todoItemID });
 
                 return output.ToList().First();
             }
@@ -37,15 +38,19 @@ namespace TodoDataAccess.DataAccess
         /// <returns></returns>
         public async Task<List<TodoItem>> GetTodoItemsByPerson(int personID, int categoryID = 0)
         {
+            string sql = "SELECT * FROM TODOITEM WHERE PersonID = @PersonID";
+            if (categoryID != 0)
+                sql += " AND CategoryID = @CategoryID";
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
-                var output = await connection.QueryAsync<TodoItem>("dbo.GET_TODOITEMSBYPERSON @PersonID, @CategoryID", new { PersonID = personID, CategoryID = categoryID });
+                var output = await connection.QueryAsync<TodoItem>(sql, new { PersonID = personID, CategoryID = categoryID });
 
                 return output.ToList();
             }
         }
 
         #endregion gets
+        #region sets
         /// <summary>
         /// Inserts a Todo Item for a given person
         /// </summary>
@@ -53,7 +58,6 @@ namespace TodoDataAccess.DataAccess
         /// <param name="categoryID">optional</param>
         /// <param name="title"></param>
         /// <param name="desc"></param>
-        #region sets
         public Task InsertTodoItem(int personID, string title, int categoryID = 0, string desc = null)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))

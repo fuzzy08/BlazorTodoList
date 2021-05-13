@@ -38,13 +38,17 @@ namespace TodoDataAccess.DataAccess
         /// <returns></returns>
         public async Task<List<Person>> GetPeople()
         {
+            //this will obviously not perform at scale well...
+            string sql = "Select * FROM dbo.People";
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
+                
                 //unfortunately, we need to return a list, not an IEnumerable, and therefore have to await the output so we can return a different type
-                var output = await connection.QueryAsync<Person>("dbo.GET_PEOPLE");
-
-                return output.ToList();
+                var output = await connection.QueryAsync<Person>(sql);
+                if (output.Count() != 0)
+                    return output.ToList();
             }
+            return null;
         }
         /// <summary>
         /// Returns the first person from the Person table with a matching email address.
@@ -53,13 +57,16 @@ namespace TodoDataAccess.DataAccess
         /// <returns></returns>
         public async Task<Person> GetPersonByEmail(string emailAddress)
         {
+            string sql = "SELECT * FROM PERSON WHERE EmailAddress = @EmailAddress";
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
                 //the query always returns an IEnumerable, but it's understood that this query will only ever return one result.
-                var output = await connection.QueryAsync<Person>("dbo.GET_PERSONBYEMAIL @Email", new { Email = emailAddress });
-
-                return output.ToList().First();
+                var output = await connection.QueryAsync<Person>(sql, new { Email = emailAddress });
+                if (output.Count() != 0)
+                    return output.ToList().First();
             }
+            return null;
+
         }
         /// <summary>
         /// returns the first person from the Person table that matches the supplied first and last name.
@@ -69,13 +76,18 @@ namespace TodoDataAccess.DataAccess
         /// <returns></returns>
         public async Task<Person> GetPersonByName(string firstName, string lastName)
         {
+            string sql = "SELECT * FROM PERSON WHERE FirstName = @FirstName AND LastName = @LastName";
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
                 //the query always returns an IEnumerable, but it's understood that this query will only ever return one result.
-                var output = await connection.QueryAsync<Person>("dbo.GET_PERSONBYNAME @LastName, @FirstName", new { LastName = lastName, FirstName = firstName });
+                var output = await connection.QueryAsync<Person>(sql, new { LastName = lastName, FirstName = firstName });
 
-                return output.ToList().First();
+                if (output.Count() != 0)
+                    return output.ToList().First();
+
             }
+            return null;
+
         }
         /// <summary>
         /// returns a list of people from the Person table that matches the supplied first and last name.
@@ -85,12 +97,17 @@ namespace TodoDataAccess.DataAccess
         /// <returns></returns>
         public async Task<List<Person>> SearchPeopleByName(string firstName, string lastName)
         {
+      
+            string sql = @"SELECT * FROM PERSON WHERE FirstName LIKE CONCAT('%', @FirstName, '%') AND LastName LIKE CONCAT('%', @LastName, '%')";
+
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(_config.GetConnectionString("TodoList")))
             {
-                var output = await connection.QueryAsync<Person>("dbo.SEARCH_PEOPLEBYNAME @LastName, @FirstName", new { LastName = lastName, FirstName = firstName });
+                var output = await connection.QueryAsync<Person>(sql, new { LastName = lastName, FirstName = firstName });
 
-                return output.ToList();
+                if (output.Count() != 0)
+                    return output.ToList();
             }
+            return null;
         }
 
         #endregion gets
@@ -117,5 +134,6 @@ namespace TodoDataAccess.DataAccess
             }
         }
         #endregion sets
+
     }
 }
