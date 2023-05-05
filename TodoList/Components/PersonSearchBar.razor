@@ -63,7 +63,7 @@
 Alright, so here's my lesson in async programming for the day. Literally, I debugged this all day.
 Async calls return the task object aaaallll the way to the top of the call stack.
 This onclick code used to read "SearchPeople(firstNameInput, lastNameInput)."
-So, this fucker never waited on the returned Task before continuing to execute the code.
+So, this lovely component never waited on the returned Task before continuing to execute the code.
 The method was executed, stuff happened, but the page was rendered before the peopleResults object
 could be populated.
 
